@@ -1,0 +1,46 @@
+
+/*
+1. Login to Gconnect. 
+2. Receivables--> DML Application --> DML Movements --> Search
+3. Make line status as 'Invoice in Progress'
+*/
+
+--Query:
+select * from gcaa_dml_ra_interface_lines where 1=1
+and interface_line_attribute3 in (select line_id from gcaa_dml_txn_t where line_status = 'IP');
+========
+select count(*), line_status,period from gcaa_dml_txn_t 
+where line_status = 'IP'
+group by line_status,period;
+========
+select * from gcaa_dml_txn_t where line_status = 'IP';
+========
+--Note: Take 9341 and period of sept-20 and update all records in gcaa_dml_txn_t
+update gcaa_dml_txn_t set header_id = 9341, period = 'Sep-2020' where line_status = 'IP';
+========
+--Note: Backup
+create table gcaa_dml_txn_t1011 as select * from gcaa_dml_txn_t;
+========
+select count(*), line_status,period from gcaa_dml_txn_t 
+where line_status = 'IP'
+group by line_status,period;
+========
+update gcaa_dml_txn_t set line_status = 'I' where line_status = 'IP';
+========
+/*goto DML--> Change line status to Processed and goto action and refresh it
+
+Tasks --> DML Processed Movements
+select month in page and click view click on search and see
+
+Now go to DML Movements and search*/
+
+select * from gcaa_dml_archieve_txn_t where period = 'Sep-2020' and header_id != 9341
+========
+select distinct header_id from gcaa_dml_archieve_txn_t where period = 'Sep-2020' and header_id != 9341
+========
+select * from gcaa_dml_headers_t where header_id in (select distinct header_id from gcaa_dml_archieve_txn_t where period = 'Sep-2020' and header_id != 9341)
+========
+update gcaa_dml_archieve_txn_t set header_id = 9361 where header_id = 9361 and period = 'Sep-2020'
+========
+/*Tasks --> DML Processed Movements
+select month in page and click view click on search and see*/
