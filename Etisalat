@@ -1,1 +1,6 @@
 https://130.162.67.56:7002/Etisalat/faces/Home.jspx?jwt=#{applCoreSecuredToken.trustToken}&node=JWT
+
+
+
+
+https://auhoracleapp01.gcaa.gov.ae:8002
